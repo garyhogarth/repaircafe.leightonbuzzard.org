@@ -4,7 +4,7 @@ Guidance for Claude Code (and other AI agents — see [AGENTS.md](AGENTS.md)) wo
 
 ## What this app is
 
-Laravel 9 app for running the Leighton Buzzard Repair Cafe: booking **Events**, logging **Items**
+Laravel 10 app for running the Leighton Buzzard Repair Cafe: booking **Events**, logging **Items**
 brought in for repair, tracking volunteer **Skills**, and check-in on the day. Jetstream handles
 auth/teams scaffolding; Livewire 2 components handle the interactive UI. See the README for the
 domain model and local setup.
@@ -16,6 +16,8 @@ topic, linked from here:
 
 - [agents/database.md](agents/database.md) — schema, local DB connection gotchas, seeding
 - [agents/design.md](agents/design.md) — Blade/Tailwind/Livewire UI conventions
+- [agents/dependencies.md](agents/dependencies.md) — Laravel major-version upgrade progress, accepted
+  security-advisory exceptions
 
 As you discover something worth remembering for next time (a gotcha, a convention, a "why is it
 done this way"), add it to the relevant topic file — create a new one under `agents/` if it doesn't
@@ -25,8 +27,9 @@ and from [AGENTS.md](AGENTS.md). Keep entries dated where the finding is time-se
 
 ## Stack specifics
 
-- PHP ^8.0.2, Laravel 9, Jetstream 2 (Livewire stack, not Inertia), Livewire 2 (not 3 — v2 API
-  differs from v3, don't use v3-only features like `wire:model.live`)
+- PHP ^8.1, Laravel 10, Jetstream 2 (Livewire stack, not Inertia), Livewire 2 (not 3 — v2 API
+  differs from v3, don't use v3-only features like `wire:model.live`). Mid-upgrade from Laravel 9 —
+  see [agents/dependencies.md](agents/dependencies.md) for progress and next steps.
 - Frontend: Blade templates, Tailwind CSS, Alpine.js, Font Awesome, tw-elements, built with Vite
 - No PHP/Composer available in some environments — check before assuming you can run `artisan` or
   `phpunit` directly; if unavailable, say so rather than guessing at output

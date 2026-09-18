@@ -6,7 +6,7 @@ https://repaircafe.leightonbuzzard.org
 
 ## What this is
 
-A [Laravel 9](https://laravel.com/docs/9.x) app (PHP, [Jetstream](https://jetstream.laravel.com/) +
+A [Laravel 10](https://laravel.com/docs/10.x) app (PHP, [Jetstream](https://jetstream.laravel.com/) +
 [Livewire 2](https://laravel-livewire.com/) for the UI, [Tailwind CSS](https://tailwindcss.com/) +
 [Alpine.js](https://alpinejs.dev/) via [Vite](https://vitejs.dev/) for the frontend) that runs the
 core domain of the repair cafe:
@@ -26,7 +26,7 @@ using Sail — open it once after installing so its daemon starts.
 
 - **Sail / Docker-only** (recommended if you don't already have PHP set up): just Docker Desktop.
   No PHP or Composer needed on your machine — see Option A.
-- **Native PHP**: PHP ^8.0.2, [Composer](https://getcomposer.org/), and a MySQL database, installable
+- **Native PHP**: PHP ^8.1, [Composer](https://getcomposer.org/), and a MySQL database, installable
   via Homebrew (`brew install php composer`) — see Option B.
 
 Both options need [Node 18+](https://nodejs.org/) for the frontend build.

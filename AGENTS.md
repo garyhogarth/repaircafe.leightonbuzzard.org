@@ -1,6 +1,6 @@
 # AGENTS.md
 
-This is a Laravel 9 app for the Leighton Buzzard Repair Cafe (event booking, item repair tracking,
+This is a Laravel 10 app for the Leighton Buzzard Repair Cafe (event booking, item repair tracking,
 volunteer management). See [README.md](README.md) for setup and the domain model.
 
 Conventions, stack details, and ground rules for AI agents working in this repo are kept in
