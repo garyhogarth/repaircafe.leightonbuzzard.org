@@ -10,7 +10,7 @@ use Laravel\Fortify\Features;
 
 Route::get('/', function () {
     $nextEvent = Event::where('ends_at', '>=', now())
-        ->with(['venue', 'users.skills'])
+        ->with(['venue', 'users.skills', 'items'])
         ->withCount('items')
         ->orderBy('starts_at')
         ->first();

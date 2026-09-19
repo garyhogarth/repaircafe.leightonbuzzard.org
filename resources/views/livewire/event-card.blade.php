@@ -38,20 +38,31 @@
                 Skills available: {{ collect($event->skills())->flatten()->unique()->implode(', ') ?: 'To be confirmed' }}
             </p>
             <div class="mt-4 uppercase tracking-wide text-sm text-yellow-600 font-semibold">
-                Guests attending: <strong>{{ $event->users->count() - $event->volunteers->count() }}</strong>
+                Guests attending: <strong>{{ $this->guestsCount }}</strong>
             </div>
             <div class="uppercase tracking-wide text-sm text-indigo-600 font-semibold">
                 Items booked in: <strong>{{ $event->items_count }}</strong>
             </div>
+
+            @auth
+                <div class="mt-2 uppercase tracking-wide text-sm text-purple-600 font-semibold">
+                    Your items booked in: <strong>{{ $this->myItemsCount }}</strong>
+                </div>
+            @endauth
         </div>
     </div>
 
-    @guest
-        <div class="text-center mt-8">
+    <div class="text-center mt-8">
+        @guest
             <a href="{{ route('register') }}"
                 class="inline-block bg-green-700 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-lg">
                 Register to attend
             </a>
-        </div>
-    @endguest
+        @else
+            <a href="{{ route('filament.dashboard.resources.items.create') }}"
+                class="inline-block bg-green-700 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-lg">
+                {{ $this->myItemsCount > 0 ? 'Book another item in' : 'Book an item in' }}
+            </a>
+        @endguest
+    </div>
 </div>

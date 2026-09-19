@@ -18,8 +18,13 @@ class EventSeeder extends Seeder
         $events = \App\Models\Event::factory(20)->create();
 
         // add some users to each event, some volunteering and some fixing
+        // (the named test accounts are excluded so their attendance on any
+        // given event stays predictable for manual testing)
+        $testEmails = ['test@test.com', 'fixer@test.com', 'volunteer@test.com', 'normal@test.com'];
+
         foreach ($events as $event) {
-            $users = User::inRandomOrder()
+            $users = User::whereNotIn('email', $testEmails)
+                ->inRandomOrder()
                 ->limit(rand(5, 100))
                 ->get();
             foreach ($users as $user) {
