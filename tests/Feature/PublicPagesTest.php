@@ -1,10 +1,43 @@
 <?php
 
+use App\Models\Event;
+use App\Models\Venue;
+
 test('home page is accessible', function () {
     $response = $this->get('/');
 
     $response->assertSuccessful();
     $response->assertSee('Don\'t bin it, repair it!', false);
+});
+
+test('home page shows a message when there is no upcoming event', function () {
+    $response = $this->get('/');
+
+    $response->assertSuccessful();
+    $response->assertSee('Check back soon for details of the next event!');
+});
+
+test('home page shows the next upcoming event', function () {
+    $venue = Venue::factory()->create(['name' => 'The Community Hall']);
+
+    Event::factory()->create([
+        'venue_id' => $venue->id,
+        'starts_at' => now()->subDay(),
+        'ends_at' => now()->subDay()->addHours(4),
+    ]);
+
+    $nextEvent = Event::factory()->create([
+        'venue_id' => $venue->id,
+        'starts_at' => now()->addDay(),
+        'ends_at' => now()->addDay()->addHours(4),
+    ]);
+
+    $response = $this->get('/');
+
+    $response->assertSuccessful();
+    $response->assertSee('Our next Repair Café event is:');
+    $response->assertSee('The Community Hall');
+    $response->assertSee($nextEvent->starts_at->format('l jS \o\f F'), false);
 });
 
 test('more information page is accessible', function () {

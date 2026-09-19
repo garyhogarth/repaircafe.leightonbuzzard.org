@@ -24,8 +24,19 @@
                                 Leighton Buzzard and let our volunteer fixers try to mend them or give advice.
                             </p>
                         </div>
+
+                        @if ($nextEvent)
+                            <h2 class="text-xl text-gray-300 my-4">
+                                Our next Repair Café event is:
+                            </h2>
+                            <livewire:event-card :event="$nextEvent" />
+                        @else
+                            <h2 class="text-xl text-gray-300 my-4">
+                                Check back soon for details of the next event!
+                            </h2>
+                        @endif
                     </div>
-                </div>                
+                </div>
             </div>
         </div>
 
