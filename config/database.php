@@ -42,6 +42,21 @@ return [
             'synchronous' => null,
         ],
 
+        // Read-only connection to the v1 (Laravel 9) database, used only by the
+        // `migrate:from-v1` command — see app/Console/Commands/MigrateFromV1.php.
+        'legacy' => [
+            'driver' => env('LEGACY_DB_CONNECTION', 'mysql'),
+            'url' => env('LEGACY_DB_URL'),
+            'host' => env('LEGACY_DB_HOST', '127.0.0.1'),
+            'port' => env('LEGACY_DB_PORT', '3306'),
+            'database' => env('LEGACY_DB_DATABASE', database_path('legacy.sqlite')),
+            'username' => env('LEGACY_DB_USERNAME', 'root'),
+            'password' => env('LEGACY_DB_PASSWORD', ''),
+            'charset' => env('LEGACY_DB_CHARSET', 'utf8mb4'),
+            'collation' => env('LEGACY_DB_COLLATION', 'utf8mb4_unicode_ci'),
+            'prefix' => '',
+        ],
+
         'mysql' => [
             'driver' => 'mysql',
             'url' => env('DB_URL'),

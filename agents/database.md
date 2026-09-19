@@ -54,6 +54,27 @@ Linked from [AGENTS.md](../AGENTS.md).
   granting it means giving that specific permission to whichever role/user needs it, not creating a
   new role.
 
+## v1 -> v2 data migration
+
+- `php artisan migrate:from-v1` (`app/Console/Commands/MigrateFromV1.php`) copies data from the
+  live v1 (Laravel 9) database into this v2 database, over a second `legacy` connection
+  (`LEGACY_DB_*` in `.env`, see `.env.example`). Most tables are a straight row copy — v1 and v2
+  share the same shapes for `venues`, `categories`, `skills`, `events`, `items`, `notes`,
+  `event_user`, `skill_user`. Two tables need transformation, not a copy: `users` (v1's
+  `is_admin`/`volunteer`/`fixer` boolean columns become Spatie role assignments in
+  `model_has_roles`; run `PermissionSeeder`/`RoleSeeder` first) and `event_item` (v2 added a
+  unique `(event_id, item_id)` constraint v1 never had, so duplicates are deduplicated, keeping
+  whichever row has a `repairer_id`/`checkedin` set).
+- Password hashes copy across unchanged — both apps use bcrypt (v1 explicitly via
+  `config/hashing.php`, v2 via the Laravel default), so existing v1 users can log in with their
+  current password after migration.
+- Sessions are **not** migrated (`--fresh` wipes domain tables, not `sessions`/`cache`/`jobs`) —
+  v2 has its own `APP_KEY`, so old session payloads/cookies can't decrypt there regardless.
+  Everyone logs back in after cutover; this is expected, not a bug.
+- Run with `--dry-run` first to see legacy row counts, `--fresh` to wipe this app's domain tables
+  before importing (needed for a second run), and inspect the docblocks on each `copy*` method for
+  the one-off column mapping it does.
+
 ## Seeding
 
 - `database/seeders/DatabaseSeeder.php` runs, in order: `PermissionSeeder`, `RoleSeeder`,
