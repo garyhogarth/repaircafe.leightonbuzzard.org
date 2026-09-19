@@ -47,6 +47,18 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
     }
 
     /**
+     * Where a user should land by default (e.g. after login) when there's
+     * no more specific page to return them to. The dashboard is for
+     * volunteers/fixers/admins; plain members land on the homepage.
+     */
+    public function defaultLandingRoute(): string
+    {
+        return $this->hasAnyRole(['admin', 'fixer', 'volunteer'])
+            ? route('filament.dashboard.pages.dashboard', absolute: false)
+            : route('home', absolute: false);
+    }
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var list<string>

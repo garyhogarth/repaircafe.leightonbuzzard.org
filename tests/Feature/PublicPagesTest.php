@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Event;
+use App\Models\User;
 use App\Models\Venue;
 
 test('home page is accessible', function () {
@@ -8,6 +9,26 @@ test('home page is accessible', function () {
 
     $response->assertSuccessful();
     $response->assertSee('Don\'t bin it, repair it!', false);
+});
+
+test('guests see login and register links in the header', function () {
+    $response = $this->get('/');
+
+    $response->assertSee('Log in');
+    $response->assertSee('Register');
+    $response->assertDontSee('Account Settings');
+});
+
+test('authenticated users see an account dropdown in the header', function () {
+    $user = User::factory()->create(['name' => 'Jordan Example']);
+
+    $response = $this->actingAs($user)->get('/');
+
+    $response->assertSee('Dashboard');
+    $response->assertSee('Jordan Example');
+    $response->assertSee('Account Settings');
+    $response->assertSee('Log out');
+    $response->assertDontSee('Log in');
 });
 
 test('home page shows a message when there is no upcoming event', function () {

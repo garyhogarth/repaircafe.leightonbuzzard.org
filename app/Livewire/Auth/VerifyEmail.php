@@ -17,7 +17,7 @@ class VerifyEmail extends Component
     public function mount(): void
     {
         if (Auth::user()->hasVerifiedEmail()) {
-            $this->redirectIntended(default: route('filament.dashboard.pages.dashboard', absolute: false), navigate: true);
+            $this->redirectIntended(default: Auth::user()->defaultLandingRoute(), navigate: true);
         }
     }
 
@@ -27,7 +27,7 @@ class VerifyEmail extends Component
     public function sendVerification(): void
     {
         if (Auth::user()->hasVerifiedEmail()) {
-            $this->redirectIntended(default: route('filament.dashboard.pages.dashboard', absolute: false), navigate: true);
+            $this->redirectIntended(default: Auth::user()->defaultLandingRoute(), navigate: true);
 
             return;
         }

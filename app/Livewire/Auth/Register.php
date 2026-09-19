@@ -49,6 +49,6 @@ class Register extends Component
 
         Session::regenerate();
 
-        $this->redirectIntended(route('filament.dashboard.pages.dashboard', absolute: false), navigate: true);
+        $this->redirectIntended($user->defaultLandingRoute(), navigate: true);
     }
 }

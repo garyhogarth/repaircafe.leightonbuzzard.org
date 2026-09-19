@@ -4,6 +4,7 @@ use App\Models\User;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\URL;
+use Spatie\Permission\Models\Role;
 
 test('email verification screen can be rendered', function () {
     $user = User::factory()->unverified()->create();
@@ -29,7 +30,7 @@ test('email can be verified', function () {
     Event::assertDispatched(Verified::class);
 
     expect($user->fresh()->hasVerifiedEmail())->toBeTrue();
-    $response->assertRedirect(route('filament.dashboard.pages.dashboard', absolute: false).'?verified=1');
+    $response->assertRedirect(route('home', absolute: false).'?verified=1');
 });
 
 test('email is not verified with invalid hash', function () {
@@ -46,10 +47,21 @@ test('email is not verified with invalid hash', function () {
     expect($user->fresh()->hasVerifiedEmail())->toBeFalse();
 });
 
-test('verified users are redirected to dashboard from email verification screen', function () {
+test('verified plain members are redirected to the homepage from email verification screen', function () {
     $user = User::factory()->create();
 
     expect($user->hasVerifiedEmail())->toBeTrue();
+
+    $response = $this->actingAs($user)->get('/verify-email');
+
+    $response->assertRedirect(route('home', absolute: false));
+});
+
+test('verified volunteers are redirected to the dashboard from email verification screen', function () {
+    Role::firstOrCreate(['name' => 'volunteer', 'guard_name' => 'web']);
+
+    $user = User::factory()->create();
+    $user->assignRole('volunteer');
 
     $response = $this->actingAs($user)->get('/verify-email');
 
