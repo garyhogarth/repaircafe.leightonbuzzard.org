@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\Item;
 use App\Models\User;
+use Filament\Facades\Filament;
 
 class ItemPolicy
 {
@@ -33,6 +34,14 @@ class ItemPolicy
      */
     public function create(User $user): bool
     {
+        // Any authenticated user can register their own item via the
+        // member-facing dashboard panel; the admin panel's item resource
+        // still requires manage-items (staff creating/booking in on behalf
+        // of anyone).
+        if (Filament::getCurrentPanel()?->getId() === 'dashboard') {
+            return true;
+        }
+
         return $user->can('manage-items');
     }
 
