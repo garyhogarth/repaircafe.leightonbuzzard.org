@@ -26,6 +26,28 @@ class Login extends Component
     public bool $remember = false;
 
     /**
+     * Remember where the user came from, so a successful login can return
+     * them there instead of always landing on the dashboard.
+     */
+    public function mount(): void
+    {
+        if (Session::has('url.intended')) {
+            return;
+        }
+
+        $previous = Session::previousUrl();
+        $previousPath = $previous ? (parse_url($previous, PHP_URL_PATH) ?? '') : '';
+
+        $authPathPrefixes = ['/login', '/register', '/forgot-password', '/reset-password', '/verify-email'];
+
+        $isAuthPage = collect($authPathPrefixes)->contains(fn ($prefix) => str_starts_with($previousPath, $prefix));
+
+        if ($previous && ! $isAuthPage) {
+            Session::put('url.intended', $previous);
+        }
+    }
+
+    /**
      * Handle an incoming authentication request.
      */
     public function login(): void
