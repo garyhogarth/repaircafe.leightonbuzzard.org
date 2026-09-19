@@ -40,6 +40,24 @@ Detail notes for AI agents touching UI (Blade, Livewire views, Tailwind). Linked
 - Livewire component views live in `resources/views/livewire/`, one file per component in
   `app/Http/Livewire/`, matched by kebab-case name.
 
+## Build / Vite
+
+- `resources/css/app.css` and `resources/js/app.js` are both declared as separate entries in
+  `vite.config.js`'s `input` array, and both are passed to `@vite([...])` in
+  `layouts/app.blade.php` and `layouts/guest.blade.php`. Keep it this way — do **not** move the CSS
+  import back inside `app.js` (`import "../css/app.css"`). A CSS file only imported from JS is
+  served by Vite's dev server as a JS module that injects a `<style>` tag at runtime, instead of a
+  real `<link rel="stylesheet">`; since this app does full (non-SPA) page reloads rather than
+  client-side routing, that ordering causes a visible flash of unstyled content on every navigation
+  in local dev, most noticeable on large unsized elements like the SVG logos (which is why they also
+  carry explicit fallback `width`/`height` attributes — see `authentication-card-logo.blade.php` and
+  the published `application-mark.blade.php`). Discovered/fixed 2026-09-18.
+- `public/build/` is deliberately **not** gitignored (`.gitignore` has `!/public/build`) — this repo
+  has no CI build step, so compiled assets are committed directly and that's what the live site
+  serves. Run `npm run build` (or `sail npm run build`) and commit the resulting
+  `public/build/assets/*` + `public/build/manifest.json` whenever you change anything under
+  `resources/js` or `resources/css`, or your changes won't reach production.
+
 ## Formatting
 
 - `.blade.php` files are formatted with Prettier + `@shufo/prettier-plugin-blade`
