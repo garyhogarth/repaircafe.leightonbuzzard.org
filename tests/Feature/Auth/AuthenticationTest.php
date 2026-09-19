@@ -4,7 +4,6 @@ use App\Livewire\Auth\Login;
 use App\Models\User;
 use Laravel\Fortify\Features;
 use Livewire\Livewire;
-use Spatie\Permission\Models\Role;
 
 test('login screen can be rendered', function () {
     $response = $this->get('/login');
@@ -41,7 +40,7 @@ test('login redirects back to the page the user came from', function () {
     $response->assertRedirect(route('more-information', absolute: false));
 });
 
-test('login falls back to the homepage for a plain member when there is no page to return to', function () {
+test('login falls back to the homepage when there is no page to return to', function () {
     $user = User::factory()->withoutTwoFactor()->create();
 
     $this->get('/login');
@@ -52,22 +51,6 @@ test('login falls back to the homepage for a plain member when there is no page 
         ->call('login');
 
     $response->assertRedirect(route('home', absolute: false));
-});
-
-test('login falls back to the dashboard for a volunteer when there is no page to return to', function () {
-    Role::firstOrCreate(['name' => 'volunteer', 'guard_name' => 'web']);
-
-    $user = User::factory()->withoutTwoFactor()->create();
-    $user->assignRole('volunteer');
-
-    $this->get('/login');
-
-    $response = Livewire::test(Login::class)
-        ->set('email', $user->email)
-        ->set('password', 'password')
-        ->call('login');
-
-    $response->assertRedirect(route('filament.dashboard.pages.dashboard', absolute: false));
 });
 
 test('login does not redirect back to another auth page', function () {

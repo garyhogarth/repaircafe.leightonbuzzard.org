@@ -30,6 +30,10 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->sidebarCollapsibleOnDesktop(true)
             ->userMenuItems([
+                Action::make('Repair Cafe Homepage')
+                    ->url(fn (): string => route('home'))
+                    ->icon('heroicon-o-home'),
+
                 Action::make('Account Settings')
                     ->url(fn (): string => route('settings.profile'))
                     ->icon('heroicon-o-cog-6-tooth'),
