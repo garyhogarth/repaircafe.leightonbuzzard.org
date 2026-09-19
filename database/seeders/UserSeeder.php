@@ -43,7 +43,15 @@ class UserSeeder extends Seeder
         // give volunteer role to volunteer user
         $volunteerUser->assignRole('volunteer');
 
-        // create 10 normal users
+        // create normal (no-role) user if not exists
+        User::firstOrCreate(
+            ['email' => 'normal@test.com'], [
+                'name' => 'Normal User',
+                'email_verified_at' => now(),
+                'password' => Hash::make('password'),
+            ]);
+
+        // create 10 more random normal users
         User::factory(10)->create();
     }
 }
