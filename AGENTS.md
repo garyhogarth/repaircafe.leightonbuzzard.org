@@ -7,10 +7,9 @@ Filament / Livewire 3 rebuild of the live v1 site, tracked by upstream milestone
 something missing is a bug. See [README.md](README.md) for setup and the domain model.
 
 This file (`AGENTS.md`) is the source of truth for AI agents working in this repo, regardless of
-which tool reads it. `CLAUDE.md`, if present locally, is a thin pointer here — this repo's
-`.gitignore` deliberately excludes `CLAUDE.md` (along with `.claude`, `.cursor`, `.idea`, etc.), so
-don't rely on it being present or committed; put anything that should reach every contributor/agent
-in this file or under `agents/` instead.
+which tool reads it. `CLAUDE.md` is a thin pointer here, kept in sync and committed alongside it —
+put anything that should reach every contributor/agent in this file or under `agents/` instead of
+`CLAUDE.md` itself.
 
 Deeper topic-specific detail lives under [agents/](agents/):
 - [agents/database.md](agents/database.md) — schema, roles/permissions, seeding
