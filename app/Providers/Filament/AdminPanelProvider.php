@@ -10,6 +10,7 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\View\PanelsRenderHook;
 use Filament\Widgets\AccountWidget;
 use Filament\Widgets\FilamentInfoWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -29,11 +30,11 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->sidebarCollapsibleOnDesktop(true)
+            ->renderHook(
+                PanelsRenderHook::USER_MENU_BEFORE,
+                fn (): \Illuminate\Contracts\View\View => view('filament.topbar.homepage-link'),
+            )
             ->userMenuItems([
-                Action::make('Repair Cafe Homepage')
-                    ->url(fn (): string => route('home'))
-                    ->icon('heroicon-o-home'),
-
                 Action::make('Account Settings')
                     ->url(fn (): string => route('settings.profile'))
                     ->icon('heroicon-o-cog-6-tooth'),

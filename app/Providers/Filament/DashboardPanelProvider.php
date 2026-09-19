@@ -12,6 +12,7 @@ use Filament\Navigation\NavigationItem;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\View\PanelsRenderHook;
 use Filament\Widgets\AccountWidget;
 use Filament\Widgets\FilamentInfoWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -29,6 +30,10 @@ class DashboardPanelProvider extends PanelProvider
             ->spa()
             ->id('dashboard')
             ->path('dashboard')
+            ->renderHook(
+                PanelsRenderHook::USER_MENU_BEFORE,
+                fn (): \Illuminate\Contracts\View\View => view('filament.topbar.homepage-link'),
+            )
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -95,9 +100,6 @@ class DashboardPanelProvider extends PanelProvider
                 FilamentInfoWidget::class,
             ])
             ->userMenuItems([
-                Action::make('Repair Cafe Homepage')
-                    ->url(fn (): string => route('home'))
-                    ->icon('heroicon-o-home'),
                 Action::make('Account Settings')
                     ->url(fn (): string => route('settings.profile'))
                     ->icon('heroicon-o-cog-6-tooth'),
