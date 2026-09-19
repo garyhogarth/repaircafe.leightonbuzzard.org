@@ -23,10 +23,28 @@ class UserSeeder extends Seeder
                 "name" => "Test User",
                 "email" => "test@test.com",
             ]);
-        // create guests
+
+        // create a guest with a predictable login, for manual testing
+        User::factory()->create([
+            "name" => "Test Guest",
+            "email" => "guest@test.com",
+        ]);
+
+        // create a volunteer with a predictable login, for manual testing
+        $testVolunteer = User::factory()
+            ->isVolunteer()
+            ->create([
+                "name" => "Test Volunteer",
+                "email" => "volunteer@test.com",
+            ]);
+        $testVolunteer
+            ->skills()
+            ->sync(Skill::inRandomOrder()->limit(5)->get());
+
+        // create random guests
         User::factory(20)->create();
 
-        // create volunteers each with 5 random skills
+        // create random volunteers each with 5 random skills
         $volunteers = User::factory(20)->isVolunteer()->create();
         foreach ($volunteers as $volunteer) {
             $skills = Skill::inRandomOrder()
