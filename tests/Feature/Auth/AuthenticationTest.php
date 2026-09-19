@@ -21,9 +21,50 @@ test('users can authenticate using the login screen', function () {
 
     $response
         ->assertHasNoErrors()
-        ->assertRedirect(route('filament.dashboard.pages.dashboard', absolute: false));
+        ->assertRedirect(route('home', absolute: false));
 
     $this->assertAuthenticated();
+});
+
+test('login redirects back to the page the user came from', function () {
+    $user = User::factory()->withoutTwoFactor()->create();
+
+    $this->get('/more-information');
+    $this->get('/login');
+
+    $response = Livewire::test(Login::class)
+        ->set('email', $user->email)
+        ->set('password', 'password')
+        ->call('login');
+
+    $response->assertRedirect(route('more-information', absolute: false));
+});
+
+test('login falls back to the homepage when there is no page to return to', function () {
+    $user = User::factory()->withoutTwoFactor()->create();
+
+    $this->get('/login');
+
+    $response = Livewire::test(Login::class)
+        ->set('email', $user->email)
+        ->set('password', 'password')
+        ->call('login');
+
+    $response->assertRedirect(route('home', absolute: false));
+});
+
+test('login does not redirect back to another auth page', function () {
+    $user = User::factory()->withoutTwoFactor()->create();
+
+    $this->get('/register');
+    $this->get('/login');
+
+    $response = Livewire::test(Login::class)
+        ->set('email', $user->email)
+        ->set('password', 'password')
+        ->call('login');
+
+    $response->assertRedirect(route('home', absolute: false));
 });
 
 test('users can not authenticate with invalid password', function () {

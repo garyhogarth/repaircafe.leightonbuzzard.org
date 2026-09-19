@@ -13,7 +13,7 @@
                 </div>
                 <div class="items-center flex flex-wrap">
                     <div class="w-full lg:w-8/12 px-4 ml-auto mr-auto text-center">
-                        <div>                            
+                        <div>
                             <h1 class="text-white font-semibold text-5xl">
                                 Got something that's busted?<br />
                                 Don't bin it, repair it!
@@ -25,7 +25,20 @@
                             </p>
                         </div>
                     </div>
-                </div>                
+                </div>
+
+                @if ($nextEvent)
+                    <h2 class="text-xl text-gray-300 text-center mt-6 mb-4">
+                        Our next Repair Café event is:
+                    </h2>
+                    <div class="w-full max-w-4xl mx-auto px-4">
+                        <livewire:event-card :event="$nextEvent" />
+                    </div>
+                @else
+                    <h2 class="text-xl text-gray-300 text-center mt-6">
+                        Check back soon for details of the next event!
+                    </h2>
+                @endif
             </div>
         </div>
 

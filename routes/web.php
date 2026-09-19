@@ -4,11 +4,18 @@ use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
 use App\Livewire\Settings\TwoFactor;
+use App\Models\Event;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 
 Route::get('/', function () {
-    return view('welcome');
+    $nextEvent = Event::where('ends_at', '>=', now())
+        ->with(['venue', 'users.skills', 'items'])
+        ->withCount('items')
+        ->orderBy('starts_at')
+        ->first();
+
+    return view('welcome', ['nextEvent' => $nextEvent]);
 })->name('home');
 
 Route::get('/more-information', function () {

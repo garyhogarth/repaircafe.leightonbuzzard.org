@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Auth;
 
+use App\Livewire\Auth\Concerns\RemembersIntendedUrl;
 use App\Models\User;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +18,8 @@ use Livewire\Component;
 #[Layout('components.layouts.auth')]
 class Login extends Component
 {
+    use RemembersIntendedUrl;
+
     #[Validate('required|string|email')]
     public string $email = '';
 
@@ -24,6 +27,11 @@ class Login extends Component
     public string $password = '';
 
     public bool $remember = false;
+
+    public function mount(): void
+    {
+        $this->rememberIntendedUrl();
+    }
 
     /**
      * Handle an incoming authentication request.
@@ -52,7 +60,7 @@ class Login extends Component
         RateLimiter::clear($this->throttleKey());
         Session::regenerate();
 
-        $this->redirectIntended(route('filament.dashboard.pages.dashboard'), navigate: false);
+        $this->redirectIntended(route('home', absolute: false), navigate: false);
     }
 
     /**

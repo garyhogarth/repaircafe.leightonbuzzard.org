@@ -12,12 +12,12 @@ use Livewire\Component;
 class VerifyEmail extends Component
 {
     /**
-     * Redirect already verified users to the dashboard.
+     * Redirect already verified users to the homepage.
      */
     public function mount(): void
     {
         if (Auth::user()->hasVerifiedEmail()) {
-            $this->redirectIntended(default: route('filament.dashboard.pages.dashboard', absolute: false), navigate: true);
+            $this->redirectIntended(default: route('home', absolute: false), navigate: true);
         }
     }
 
@@ -27,7 +27,7 @@ class VerifyEmail extends Component
     public function sendVerification(): void
     {
         if (Auth::user()->hasVerifiedEmail()) {
-            $this->redirectIntended(default: route('filament.dashboard.pages.dashboard', absolute: false), navigate: true);
+            $this->redirectIntended(default: route('home', absolute: false), navigate: true);
 
             return;
         }
